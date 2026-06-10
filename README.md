@@ -2,7 +2,7 @@
 
 > React + Vite로 재구현한 카페 브랜드 소개 사이트
 
-🌐 **배포 주소**: https://yong275.github.io/rest04-react/
+🌐 **배포 주소**: https://yong275.github.io/rest04-1/
 
 ---
 
