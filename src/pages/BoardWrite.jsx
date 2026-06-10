@@ -4,10 +4,10 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 
 const CONFIG = {
-  event:   { label: '이벤트' },
-  news:    { label: '최신소식' },
-  notice:  { label: '공지사항' },
-  recruit: { label: '채용공고' },
+  event:   { label: '이벤트',   table: 'event_posts' },
+  news:    { label: '최신소식', table: 'news_posts' },
+  notice:  { label: '공지사항', table: 'notice_posts' },
+  recruit: { label: '채용공고', table: 'recruit_posts' },
 }
 
 export default function BoardWrite() {
@@ -26,8 +26,7 @@ export default function BoardWrite() {
     if (!user) return
     setLoading(true)
     setError('')
-    const { error } = await supabase.from('posts').insert({
-      type,
+    const { error } = await supabase.from(config.table).insert({
       title,
       content,
       image_url: imageUrl || null,

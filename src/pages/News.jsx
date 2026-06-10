@@ -30,15 +30,15 @@ export default function News() {
   const [recruits, setRecruits] = useState([])
 
   useEffect(() => {
-    const fetchPosts = (type, setter, limit = 5) =>
-      supabase.from('posts').select('id, title, created_at, image_url')
-        .eq('type', type).order('created_at', { ascending: false }).limit(limit)
+const fetchTable = (table, setter, limit = 5) =>
+      supabase.from(table).select('id, title, created_at, image_url')
+        .order('created_at', { ascending: false }).limit(limit)
         .then(({ data }) => setter(data || []))
 
-    fetchPosts('event', setEvents, 20)
-    fetchPosts('news', setNewsList)
-    fetchPosts('notice', setNotices)
-    fetchPosts('recruit', setRecruits)
+    fetchTable('event_posts', setEvents, 20)
+    fetchTable('news_posts', setNewsList)
+    fetchTable('notice_posts', setNotices)
+    fetchTable('recruit_posts', setRecruits)
   }, [])
 
   const canPrev = eventIdx > 0

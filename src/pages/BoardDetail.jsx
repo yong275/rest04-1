@@ -4,10 +4,10 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 
 const CONFIG = {
-  event:   { label: '이벤트',   tagClass: 'event',   tagLabel: 'EVENT' },
-  news:    { label: '최신소식', tagClass: 'new',     tagLabel: 'NEW' },
-  notice:  { label: '공지사항', tagClass: 'notice',  tagLabel: '공지' },
-  recruit: { label: '채용공고', tagClass: 'recruit', tagLabel: '채용' },
+  event:   { label: '이벤트',   table: 'event_posts',   tagClass: 'event',   tagLabel: 'EVENT' },
+  news:    { label: '최신소식', table: 'news_posts',    tagClass: 'new',     tagLabel: 'NEW' },
+  notice:  { label: '공지사항', table: 'notice_posts',  tagClass: 'notice',  tagLabel: '공지' },
+  recruit: { label: '채용공고', table: 'recruit_posts', tagClass: 'recruit', tagLabel: '채용' },
 }
 
 export default function BoardDetail() {
@@ -20,7 +20,7 @@ export default function BoardDetail() {
 
   useEffect(() => {
     supabase
-      .from('posts')
+      .from(CONFIG[type]?.table)
       .select('*')
       .eq('id', id)
       .single()
@@ -33,7 +33,7 @@ export default function BoardDetail() {
 
   async function handleDelete() {
     if (!window.confirm('게시물을 삭제하시겠습니까?')) return
-    const { error } = await supabase.from('posts').delete().eq('id', id)
+    const { error } = await supabase.from(CONFIG[type]?.table).delete().eq('id', id)
     if (!error) navigate(`/board/${type}`)
   }
 

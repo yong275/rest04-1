@@ -4,10 +4,10 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 
 const CONFIG = {
-  event:   { label: '이벤트',   banner: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=1600&q=80', tagClass: 'event',   tagLabel: 'EVENT' },
-  news:    { label: '최신소식', banner: 'https://images.unsplash.com/photo-1534040385115-33dcb3acba5b?auto=format&fit=crop&w=1600&q=80', tagClass: 'new',     tagLabel: 'NEW' },
-  notice:  { label: '공지사항', banner: 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1600&q=80', tagClass: 'notice',  tagLabel: '공지' },
-  recruit: { label: '채용공고', banner: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=1600&q=80', tagClass: 'recruit', tagLabel: '채용' },
+  event:   { label: '이벤트',   table: 'event_posts',   banner: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=1600&q=80', tagClass: 'event',   tagLabel: 'EVENT' },
+  news:    { label: '최신소식', table: 'news_posts',    banner: 'https://images.unsplash.com/photo-1534040385115-33dcb3acba5b?auto=format&fit=crop&w=1600&q=80', tagClass: 'new',     tagLabel: 'NEW' },
+  notice:  { label: '공지사항', table: 'notice_posts',  banner: 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=1600&q=80', tagClass: 'notice',  tagLabel: '공지' },
+  recruit: { label: '채용공고', table: 'recruit_posts', banner: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=1600&q=80', tagClass: 'recruit', tagLabel: '채용' },
 }
 
 export default function Board() {
@@ -22,9 +22,8 @@ export default function Board() {
     if (!config) { navigate('/news'); return }
     setLoading(true)
     supabase
-      .from('posts')
+      .from(config.table)
       .select('id, title, author_email, created_at')
-      .eq('type', type)
       .order('created_at', { ascending: false })
       .then(({ data }) => { setPosts(data || []); setLoading(false) })
   }, [type])
