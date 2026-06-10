@@ -27,7 +27,10 @@ export default function Login() {
   async function handleKakao() {
     await supabase.auth.signInWithOAuth({
       provider: 'kakao',
-      options: { redirectTo: window.location.origin + import.meta.env.BASE_URL },
+      options: {
+        redirectTo: window.location.origin + import.meta.env.BASE_URL,
+        queryParams: { scope: 'profile' },
+      },
     })
   }
 
