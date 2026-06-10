@@ -1,4 +1,5 @@
 import { Link, NavLink } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
 
 const NAV = [
   {
@@ -31,16 +32,18 @@ const NAV = [
   {
     label: '회사소식', to: '/news',
     sub: [
-      { label: '이벤트',   to: '/news#event' },
-      { label: '최신 소식', to: '/news#latest' },
-      { label: '공지사항', to: '/news#notice' },
-      { label: '채용 공고', to: '/news#recruit' },
+      { label: '이벤트',    to: '/board/event' },
+      { label: '최신 소식', to: '/board/news' },
+      { label: '공지사항',  to: '/board/notice' },
+      { label: '채용 공고', to: '/board/recruit' },
     ],
     desc: 'AZURE CAFÉ의\n새로운 소식과\n이벤트를 전해드립니다.',
   },
 ]
 
 export default function Header() {
+  const { user, signOut } = useAuth()
+
   return (
     <header>
       <h1 className="logo">
@@ -74,6 +77,11 @@ export default function Header() {
         <ul className="lnb clearfix">
           <li><a href="#" className="language">ENGLISH</a></li>
           <li><a href="#" className="sitemap">SITEMAP</a></li>
+          {user ? (
+            <li><button className="lnb_btn" onClick={signOut}>LOGOUT</button></li>
+          ) : (
+            <li><Link to="/login" className="language">LOGIN</Link></li>
+          )}
         </ul>
       </nav>
     </header>

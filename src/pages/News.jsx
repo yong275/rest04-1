@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 
 function useScrollToHash() {
   const { hash } = useLocation()
@@ -71,7 +71,7 @@ export default function News() {
       <article id="latest" className="sub_content news_section">
         <div className="news_board_header">
           <h3>최신 소식</h3>
-          <a href="#">게시글 전체보기</a>
+          <Link to="/board/news">게시글 전체보기</Link>
         </div>
         <ul className="news_list">
           {NEWS_LIST.map(n => (
@@ -91,7 +91,7 @@ export default function News() {
       <article className="sub_content" style={{ paddingTop: 60 }}>
         <div style={{ display: 'flex', gap: 40, alignItems: 'flex-start' }}>
           <div style={{ flex: 1 }} id="notice">
-            <div className="news_board_header"><h3>공지사항</h3><a href="#">전체보기</a></div>
+            <div className="news_board_header"><h3>공지사항</h3><Link to="/board/notice">전체보기</Link></div>
             <ul className="news_list">
               {NOTICES.map(n => (
                 <li key={n.text}>
@@ -105,7 +105,7 @@ export default function News() {
             </ul>
           </div>
           <div style={{ flex: 1 }} id="recruit">
-            <div className="news_board_header"><h3>채용 공고</h3><a href="#">전체보기</a></div>
+            <div className="news_board_header"><h3>채용 공고</h3><Link to="/board/recruit">전체보기</Link></div>
             <ul className="news_list">
               {RECRUITS.map(r => (
                 <li key={r.text}>
