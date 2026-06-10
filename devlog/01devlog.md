@@ -1,4 +1,4 @@
-# DEVLOG — AZURE CAFÉ React 버전
+# DEVLOG 01 — AZURE CAFÉ React 버전
 
 ---
 
