@@ -675,6 +675,7 @@ body { font-family: 'Noto Sans KR', sans-serif; color: var(--dark); background: 
   #sub_wrap footer > .info > address { width: auto; margin: 0 40px; }
   .ceo_img_box { width: 50%; }
   .ceo_text_box { width: 48%; }
+  .auth_wrap { width: 100%; max-width: 480px; margin: 60px auto; }
 }
 @media screen and (max-width: 1024px) {
   #mainSection article:nth-child(1)  { width: 75%; }
@@ -740,6 +741,13 @@ body { font-family: 'Noto Sans KR', sans-serif; color: var(--dark); background: 
   #sub_wrap footer > .info > .policy { margin: 0 20px 20px; }
   #sub_wrap footer > .info > address { margin: 0 20px; }
   #sub_wrap footer > .fnb > ul > li { width: 100%; float: none; margin-left: 0; min-height: unset; border-left: none; border-top: 1px solid #d0c8bc; padding: 10px 0; }
+  .auth_wrap { margin: 40px 20px; padding: 36px 24px; }
+  .auth_title { font-size: 22px; }
+  .board_detail_title { font-size: 18px; }
+  .board_detail_info { flex-direction: column; gap: 4px; }
+  .news_list > li > a { gap: 10px; padding: 14px 6px; font-size: 13px; }
+  .board_num { width: 24px; font-size: 12px; }
+  .news_tag { font-size: 10px; padding: 2px 7px; }
   #mainSection article:nth-child(1)  { width: 100%; height: 360px; }
   #mainSection article:nth-child(2)  { width: 100%; }
   #mainSection article:nth-child(3)  { display: none; }
