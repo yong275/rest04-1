@@ -11,30 +11,39 @@ function useScrollToHash() {
   }, [hash])
 }
 
-const EVENTS = [
-  { img: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=800&q=80', tag: '2024 SUMMER EVENT', title: '여름 신메뉴 출시\n20% 할인' },
-  { img: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=800&q=80', tag: 'ANNIVERSARY EVENT', title: '창립 14주년\n기념 쿠폰 증정' },
-  { img: 'https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=800&q=80', tag: 'NEW STORE OPEN', title: '강남 플래그십\n스토어 오픈' },
+const EVENT_GRADIENTS = [
+  'linear-gradient(135deg, #1a5272 0%, #87CEEB 100%)',
+  'linear-gradient(135deg, #5a3a2a 0%, #c4956a 100%)',
+  'linear-gradient(135deg, #2a3a4a 0%, #5a7080 100%)',
+  'linear-gradient(135deg, #3a1a5a 0%, #a070c0 100%)',
+  'linear-gradient(135deg, #1a3a1a 0%, #4a8a4a 100%)',
 ]
+
+const VISIBLE = 3
 
 export default function News() {
   useScrollToHash()
   const [events, setEvents] = useState([])
+  const [eventIdx, setEventIdx] = useState(0)
   const [newsList, setNewsList] = useState([])
   const [notices, setNotices] = useState([])
   const [recruits, setRecruits] = useState([])
 
   useEffect(() => {
-    const fetch = (type, setter) =>
-      supabase.from('posts').select('id, title, created_at').eq('type', type)
-        .order('created_at', { ascending: false }).limit(5)
+    const fetchPosts = (type, setter, limit = 5) =>
+      supabase.from('posts').select('id, title, created_at, image_url')
+        .eq('type', type).order('created_at', { ascending: false }).limit(limit)
         .then(({ data }) => setter(data || []))
 
-    fetch('event', setEvents)
-    fetch('news', setNewsList)
-    fetch('notice', setNotices)
-    fetch('recruit', setRecruits)
+    fetchPosts('event', setEvents, 20)
+    fetchPosts('news', setNewsList)
+    fetchPosts('notice', setNotices)
+    fetchPosts('recruit', setRecruits)
   }, [])
+
+  const canPrev = eventIdx > 0
+  const canNext = eventIdx + VISIBLE < events.length
+  const visibleEvents = events.slice(eventIdx, eventIdx + VISIBLE)
 
   return (
     <section>
@@ -47,35 +56,53 @@ export default function News() {
       </div>
 
       <article id="event" className="sub_content">
-        <h2>이벤트</h2>
-        <div className="event_banner_wrap">
-          {EVENTS.map(e => (
-            <div key={e.tag} className="event_card" style={{ backgroundImage: `url('${e.img}')` }}>
-              <div className="event_info">
-                <p>{e.tag}</p>
-                <h3>{e.title}</h3>
-                <Link to="/board/event">자세히 보기</Link>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="news_board_header" style={{ marginTop: 40 }}>
-          <h3>최근 이벤트</h3>
+        <div className="news_board_header">
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 40, color: 'var(--point)' }}>이벤트</h2>
           <Link to="/board/event">게시글 전체보기</Link>
         </div>
-        <ul className="news_list">
-          {events.length === 0
-            ? <li style={{ padding: '20px 10px', color: '#aaa', fontSize: 14 }}>등록된 이벤트가 없습니다.</li>
-            : events.map(p => (
-              <li key={p.id}>
-                <Link to={`/board/event/${p.id}`}>
-                  <span className="news_tag event">EVENT</span>
-                  <span className="news_title">{p.title}</span>
-                  <span className="news_date">{new Date(p.created_at).toLocaleDateString('ko-KR')}</span>
+        {events.length === 0 ? (
+          <p className="board_empty">등록된 이벤트가 없습니다.</p>
+        ) : (
+          <div className="event_carousel" style={{ marginTop: 30 }}>
+            {canPrev && (
+              <button className="carousel_btn prev" onClick={() => setEventIdx(i => i - 1)}>
+                <i className="fa-solid fa-chevron-left" />
+              </button>
+            )}
+            <div className="event_banner_wrap">
+              {visibleEvents.map((e, i) => (
+                <Link
+                  key={e.id}
+                  to={`/board/event/${e.id}`}
+                  className="event_card"
+                  style={{ backgroundImage: e.image_url ? `url('${e.image_url}')` : EVENT_GRADIENTS[(eventIdx + i) % EVENT_GRADIENTS.length] }}
+                >
+                  <div className="event_info">
+                    <p>{new Date(e.created_at).toLocaleDateString('ko-KR')}</p>
+                    <h3>{e.title}</h3>
+                    <span className="event_more_btn">자세히 보기</span>
+                  </div>
                 </Link>
-              </li>
-            ))}
-        </ul>
+              ))}
+            </div>
+            {canNext && (
+              <button className="carousel_btn next" onClick={() => setEventIdx(i => i + 1)}>
+                <i className="fa-solid fa-chevron-right" />
+              </button>
+            )}
+            {events.length > VISIBLE && (
+              <div className="carousel_dots">
+                {Array.from({ length: events.length - VISIBLE + 1 }).map((_, i) => (
+                  <button
+                    key={i}
+                    className={`carousel_dot${eventIdx === i ? ' active' : ''}`}
+                    onClick={() => setEventIdx(i)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </article>
       <hr />
 

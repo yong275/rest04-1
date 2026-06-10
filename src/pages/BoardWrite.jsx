@@ -17,6 +17,7 @@ export default function BoardWrite() {
   const config = CONFIG[type]
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -29,6 +30,7 @@ export default function BoardWrite() {
       type,
       title,
       content,
+      image_url: imageUrl || null,
       author_id: user.id,
       author_email: user.email,
     })
@@ -54,6 +56,16 @@ export default function BoardWrite() {
               maxLength={200}
             />
           </div>
+          {type === 'event' && (
+            <div className="write_group">
+              <input
+                type="url"
+                placeholder="이미지 URL (선택) — 이벤트 카드 배경으로 사용됩니다"
+                value={imageUrl}
+                onChange={e => setImageUrl(e.target.value)}
+              />
+            </div>
+          )}
           <div className="write_group">
             <textarea
               placeholder="내용을 입력하세요"
